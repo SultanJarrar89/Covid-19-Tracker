@@ -37,12 +37,13 @@ function App() {
           </Select>
         </FormControl>
       </div>
-      {/* Header */}
 
-      {/* Title + dropdown field */}
-      {/* InfoBox */}
-      {/* InfoBox */}
-      {/* InfoBox */}
+      <div className='app__stats'>
+        {/* InfoBox */}
+        {/* InfoBox */}
+        {/* InfoBox */}
+      </div>
+
       {/* Map */}
     </div>
   )
