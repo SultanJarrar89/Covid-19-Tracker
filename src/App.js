@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import InfoBox from './InfoBox'
 import Map from './Map'
+import Table from './Table'
 import {
   Card,
   CardContent,
@@ -13,18 +14,27 @@ function App() {
   const [countries, setCountries] = useState([])
   const [country, setInputCountry] = useState('worldwide')
   const [countryInfo, setCountryInfo] = useState({})
+  const [tableData, setTableData] = useState([])
+  useEffect(() => {
+    fetch('https://disease.sh/v3/covid-19/all')
+      .then((response) => response.json())
+      .then((data) => {
+        setCountryInfo(data)
+      })
+  }, [])
+
   useEffect(() => {
     const getCountriesData = async () => {
-      fetch('https://disease.sh/v3/covid-19/countries')
+      await fetch('https://disease.sh/v3/covid-19/countries')
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
           const countries = data.map((country) => ({
             id: country._id,
             name: country.country,
             value: country.countryInfo.iso2,
           }))
           setCountries(countries)
+          setTableData(data)
         })
     }
 
@@ -43,7 +53,6 @@ function App() {
       .then((data) => {
         setInputCountry(countryCode)
         setCountryInfo(data)
-        console.log(data)
       })
   }
 
@@ -91,7 +100,7 @@ function App() {
       <Card className='app__right'>
         <CardContent>
           <h3>Live Cases by Country</h3>
-          {/* Table */}
+          <Table countries={tableData} />
           <h3>Worldwide new Cases</h3>
           {/* Graph */}
         </CardContent>
