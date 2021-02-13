@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import InfoBox from './InfoBox'
+import Map from './Map'
 import { FormControl, MenuItem, Select } from '@material-ui/core'
 import './App.css'
 function App() {
@@ -45,7 +46,7 @@ function App() {
         <InfoBox title='Coronavirus Cases' cases={3000} total={20000} />
       </div>
 
-      {/* Map */}
+      <Map />
     </div>
   )
 }
