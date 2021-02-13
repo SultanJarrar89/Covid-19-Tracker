@@ -12,7 +12,7 @@ import {
   Select,
 } from '@material-ui/core'
 
-import sortData from './utils'
+import { sortData } from './utils'
 import './App.css'
 import 'leaflet/dist/leaflet.css'
 
@@ -20,9 +20,11 @@ function App() {
   const [countries, setCountries] = useState([])
   const [country, setInputCountry] = useState('worldwide')
   const [countryInfo, setCountryInfo] = useState({})
+  const [mapCountries, setMapCountries] = useState([])
   const [tableData, setTableData] = useState([])
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 })
   const [mapZoom, setMapZoom] = useState(3)
+
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
       .then((response) => response.json())
@@ -44,6 +46,7 @@ function App() {
           let sortedData = sortData(data)
           setCountries(countries)
           setTableData(sortedData)
+          setMapCountries(data)
         })
     }
 
@@ -62,6 +65,8 @@ function App() {
       .then((data) => {
         setInputCountry(countryCode)
         setCountryInfo(data)
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long])
+        setMapZoom(4)
       })
   }
 
@@ -104,7 +109,7 @@ function App() {
           />
         </div>
 
-        <Map center={mapCenter} zoom={mapZoom} />
+        <Map center={mapCenter} zoom={mapZoom} countries={mapCountries} />
       </div>
       <Card className='app__right'>
         <CardContent>
