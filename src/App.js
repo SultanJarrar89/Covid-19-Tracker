@@ -13,6 +13,7 @@ import {
 
 import sortData from './utils'
 import './App.css'
+import LineGraph from './LineGraph'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -107,7 +108,7 @@ function App() {
           <h3>Live Cases by Country</h3>
           <Table countries={tableData} />
           <h3>Worldwide new Cases</h3>
-          {/* Graph */}
+          <LineGraph />
         </CardContent>
       </Card>
     </div>
