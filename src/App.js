@@ -12,12 +12,15 @@ import './App.css'
 function App() {
   const [countries, setCountries] = useState([])
   const [country, setInputCountry] = useState('worldwide')
+  const [countryInfo, setCountryInfo] = useState({})
   useEffect(() => {
     const getCountriesData = async () => {
       fetch('https://disease.sh/v3/covid-19/countries')
         .then((response) => response.json())
         .then((data) => {
+          console.log(data)
           const countries = data.map((country) => ({
+            id: country._id,
             name: country.country,
             value: country.countryInfo.iso2,
           }))
@@ -28,12 +31,24 @@ function App() {
     getCountriesData()
   }, [])
 
-  const onCountryChange = (e) => {
-    setInputCountry(e.target.value)
+  const onCountryChange = async (e) => {
+    const countryCode = e.target.value
+
+    const url =
+      countryCode === 'worldwide'
+        ? 'https://disease.sh/v3/covid-19/all'
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setInputCountry(countryCode)
+        setCountryInfo(data)
+        console.log(data)
+      })
   }
 
   return (
-    <div className='App'>
+    <div className='app'>
       <div className='app__left'>
         <div className='app__header'>
           <h1>Covid 19 Tracker</h1>
@@ -45,16 +60,30 @@ function App() {
             >
               <MenuItem value='worldwide'>Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem value={country.value}>{country.name}</MenuItem>
+                <MenuItem key={country.id} value={country.value}>
+                  {country.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
 
         <div className='app__stats'>
-          <InfoBox title='Coronavirus Cases' cases={3000} total={20000} />
-          <InfoBox title='Coronavirus Cases' cases={3000} total={20000} />
-          <InfoBox title='Coronavirus Cases' cases={3000} total={20000} />
+          <InfoBox
+            title='Coronavirus Cases'
+            cases={countryInfo.todayCases}
+            total={countryInfo.cases}
+          />
+          <InfoBox
+            title='Coronavirus Cases'
+            cases={countryInfo.todayRecovered}
+            total={countryInfo.recovered}
+          />
+          <InfoBox
+            title='Coronavirus Cases'
+            cases={countryInfo.todayDeaths}
+            total={countryInfo.deaths}
+          />
         </div>
 
         <Map />
