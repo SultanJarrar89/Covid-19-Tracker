@@ -11,8 +11,9 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core'
+import numeral from 'numeral'
 
-import { sortData } from './utils'
+import { sortData, prettyPrintStat } from './utils'
 import './App.css'
 import 'leaflet/dist/leaflet.css'
 
@@ -94,18 +95,18 @@ function App() {
         <div className='app__stats'>
           <InfoBox
             title='Coronavirus Cases'
-            cases={countryInfo.todayCases}
-            total={countryInfo.cases}
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={numeral(countryInfo.cases).format('0.0a')}
           />
           <InfoBox
-            title='Coronavirus Cases'
-            cases={countryInfo.todayRecovered}
-            total={countryInfo.recovered}
+            title='Recovered'
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={numeral(countryInfo.recovered).format('0.0a')}
           />
           <InfoBox
-            title='Coronavirus Cases'
-            cases={countryInfo.todayDeaths}
-            total={countryInfo.deaths}
+            title='Deaths'
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={numeral(countryInfo.deaths).format('0.0a')}
           />
         </div>
 
