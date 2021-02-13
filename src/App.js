@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import InfoBox from './InfoBox'
 import Map from './Map'
 import Table from './Table'
+
 import {
   Card,
   CardContent,
@@ -9,7 +10,10 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core'
+
+import sortData from './utils'
 import './App.css'
+
 function App() {
   const [countries, setCountries] = useState([])
   const [country, setInputCountry] = useState('worldwide')
@@ -33,8 +37,9 @@ function App() {
             name: country.country,
             value: country.countryInfo.iso2,
           }))
+          let sortedData = sortData(data)
           setCountries(countries)
-          setTableData(data)
+          setTableData(sortedData)
         })
     }
 
